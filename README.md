@@ -10,6 +10,7 @@ A aplicação permite aos utilizadores gerir o planeamento das suas viagens (des
 
 O projeto segue o **Cenário 1** das diretrizes da disciplina, no qual a Interface Front-End comunica diretamente com a API Back-End em Python (Flask) para operações de persistência de dados e consome um serviço externo para consulta de passagens aéreas.
 
+![Diagrama de Arquitetura do Sistema](./assets/arquitetura-sistema.png)
 ---
 
 ## 🛠️ Tecnologias Utilizadas
@@ -38,10 +39,11 @@ O projeto segue o **Cenário 1** das diretrizes da disciplina, no qual a Interfa
 ## 🚀 Como Executar com Docker
 
 ### Pré-requisitos
-- Docker instalado e em execução na máquina local.
+- Docker e docker compose instalado e em execução na máquina local.
+- O ficheiro docker-compose.yml presente na raiz deste repositório orquestra a execução simultânea da API Back-End e da Interface Front-End em containers isolados.
 
 ### Passos de Execução
 
 1. **Construir a imagem Docker:**
    ```bash
-   docker build -t travel-planner-front .
+   docker compose up --build
