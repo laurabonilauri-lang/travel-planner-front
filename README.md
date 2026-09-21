@@ -10,7 +10,7 @@ A aplicação permite aos utilizadores gerir o planeamento das suas viagens (des
 
 O projeto segue o **Cenário 1** das diretrizes da disciplina, no qual a Interface Front-End comunica diretamente com a API Back-End em Python (Flask) para operações de persistência de dados e consome um serviço externo para consulta de passagens aéreas.
 
-![Diagrama de Arquitetura do Sistema](./assets/arquitetura-sistema.png)
+![Diagrama de Arquitetura do Sistema](./arquitetura-sistema.png)
 ---
 
 ## 🛠️ Tecnologias Utilizadas
