@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Planner - Gestão de Viagens</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#"><i class="bi bi-airplane-engines-fill me-2"></i>Travel Planner</a>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        <div class="row g-4">
+            
+            <!-- Coluna Principal: Minhas Viagens -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                        <h5 class="mb-0 fw-bold text-secondary"><i class="bi bi-map-fill me-2"></i>Minhas Viagens</h5>
+                        <button class="btn btn-sm btn-outline-primary" onclick="carregarViagens()">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Atualizar (GET)
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="lista-viagens" class="row g-3">
+                            <!-- Estado inicial de carregamento / Renderizado via JS -->
+                            <div class="col-12 text-center py-4 text-muted">
+                                <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                                Carregando viagens...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coluna Lateral: Nova Viagem & Consulta de Voos -->
+            <div class="col-lg-4">
+                
+                <!-- Formulário: Nova Viagem (POST) -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0 fw-bold text-success"><i class="bi bi-plus-circle-fill me-2"></i>Planejar Viagem (POST)</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="form-viagem" onsubmit="criarViagem(event)">
+                            <div class="mb-2">
+                                <label for="destino" class="form-label small fw-bold">Destino</label>
+                                <input type="text" id="destino" class="form-control form-control-sm" required placeholder="Ex: Miami, Flórida">
+                            </div>
+                            <div class="row g-2 mb-2">
+                                <div class="col-6">
+                                    <label for="data_inicio" class="form-label small fw-bold">Data Início</label>
+                                    <input type="date" id="data_inicio" class="form-control form-control-sm" required>
+                                </div>
+                                <div class="col-6">
+                                    <label for="data_fim" class="form-label small fw-bold">Data Fim</label>
+                                    <input type="date" id="data_fim" class="form-control form-control-sm" required>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label for="orcamento" class="form-label small fw-bold">Orçamento Estimado (R$)</label>
+                                <input type="number" step="100" id="orcamento" class="form-control form-control-sm" required placeholder="5000">
+                            </div>
+                            <div class="mb-3">
+                                <label for="tipo_bagagem" class="form-label small fw-bold">Bagagem</label>
+                                <select id="tipo_bagagem" class="form-select form-select-sm">
+                                    <option value="Mala de Mão">Apenas Mala de Mão</option>
+                                    <option value="Despachada">Mala Despachada</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-sm w-100">
+                                <i class="bi bi-check-lg me-1"></i>Salvar Viagem
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- API Externa: Pesquisa de Voos / Cotação -->
+                <div class="card shadow-sm mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary"><i class="bi bi-search me-1"></i>Pesquisar Voos (API Externa)</h5>
+                        <div class="input-group mb-2">
+                            <input type="text" id="codigo-iata" class="form-control" placeholder="Origem/Destino (ex: MIA, CWB)">
+                            <button class="btn btn-primary" type="button" onclick="pesquisarVoosExterna()">Buscar</button>
+                        </div>
+                        <small class="text-muted d-block mb-2">Digite um código IATA para pesquisar voos.</small>
+                        
+                        <!-- Área onde o resultado do voo será exibido -->
+                        <div id="resultado-voos"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Edição de Status/Orçamento (PUT) -->
+    <div class="modal fade" id="modalEdicao" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold text-primary">Atualizar Viagem (PUT)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="edit-id">
+                    <div class="mb-3">
+                        <label for="edit-status" class="form-label fw-bold">Status do Planejamento</label>
+                        <select id="edit-status" class="form-select">
+                            <option value="Planejando">Planejando</option>
+                            <option value="Reservado">Reservado</option>
+                            <option value="Concluído">Concluído</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-orcamento" class="form-label fw-bold">Ajustar Orçamento (R$)</label>
+                        <input type="number" step="100" id="edit-orcamento" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="salvarEdicaoViagem()">Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

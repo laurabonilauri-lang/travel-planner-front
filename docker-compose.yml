@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  # Serviço do Back-End em Python
+  api:
+    build: ./travel-planner-api
+    container_name: travel-api
+    ports:
+      - "5000:5000"
+    restart: always
+
+  # Serviço do Front-End NGINX
+  web:
+    build: ./travel-planner-front
+    container_name: travel-web
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    restart: always
