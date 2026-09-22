@@ -34,6 +34,8 @@ O projeto segue o **Cenário 1** das diretrizes da disciplina, no qual a Interfa
 - **Serviço Consumido:** Flight API / Public Flight Quotes API
 - **Objetivo:** Permitir ao utilizador pesquisar cotações e horários de voos com base no código IATA do aeroporto de destino sem redirecionar a navegação fora da aplicação.
 
+  ![arquitetura] (arquitetura-sistema.png)
+
 ---
 
 ## 🚀 Como Executar com Docker
