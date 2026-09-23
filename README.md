@@ -21,6 +21,7 @@ O projeto segue o **Cenário 1** das diretrizes da disciplina, no qual a Interfa
 - **Docker** para containerização do ambiente
 
 ---
+![Diagrama de Arquitetura do Sistema](./arquitetura-sistema.png)
 
 ## 🌐 Consumo das Rotas e APIs
 
