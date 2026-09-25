@@ -175,7 +175,7 @@ function limparFormulario() {
     }
 }
 
-// 6. Função para pesquisar voos na API Externa
+// 6. Função para pesquisar destinos na API Externa
 function pesquisarVoosExterna(event) {
     if (event) event.preventDefault();
 
@@ -183,44 +183,43 @@ function pesquisarVoosExterna(event) {
     const containerResultado = document.getElementById('resultado-voos');
 
     if (!inputIata || !inputIata.value.trim()) {
-        alert('Por favor, digite um código IATA (ex: MIA, CWB, GRU).');
+        alert('Por favor, digite um destino para pesquisar (ex: Paris, Miami, Curitiba).');
         return;
     }
 
-    const codigo = inputIata.value.trim().toUpperCase();
+    const termo = inputIata.value.trim();
 
     if (containerResultado) {
-        containerResultado.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status"></div> Buscando voos...';
+        containerResultado.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status"></div> A consultar informações do destino...';
     }
 
-    fetch(`${API_URL}/voos/${codigo}`)
-        .then(response => {
-            if (!response.ok) throw new Error('Erro ao consultar API de voos');
-            return response.json();
+    fetch(`http://localhost:5000/voos/${encodeURIComponent(termo)}`)
+        .then(async response => {
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || `Erro HTTP ${response.status}`);
+            }
+            return data;
         })
         .then(data => {
             if (containerResultado) {
                 containerResultado.innerHTML = `
                     <div class="alert alert-success mt-2 py-2 mb-0">
-                        <small><strong>Voos encontrados para ${codigo}:</strong></small><br>
-                        <small>Aeroporto/Origem: ${data.aeroporto || codigo}</small><br>
-                        <small>Status: ${data.status || 'Operando normalmente'}</small>
+                        <small><strong>${data.aeroporto}</strong></small><br>
+                        <small>${data.status}</small><br>
+                        <small>Rota: ${data.origem} ➔ ${data.destino}</small>
                     </div>
                 `;
-            } else {
-                alert(`Busca concluída para ${codigo}: Status ${data.status || 'Operando'}`);
             }
         })
         .catch(error => {
-            console.error('Erro na consulta externa:', error);
+            console.error('Erro na consulta:', error);
             if (containerResultado) {
                 containerResultado.innerHTML = `
-                    <div class="alert alert-warning mt-2 py-2 mb-0">
-                        <small>Não foi possível carregar dados para o código <strong>${codigo}</strong>.</small>
+                    <div class="alert alert-danger mt-2 py-2 mb-0">
+                        <small><strong>Erro na busca:</strong> ${error.message}</small>
                     </div>
                 `;
-            } else {
-                alert(`Aviso: Não foi possível obter voos para ${codigo}.`);
             }
         });
 }
