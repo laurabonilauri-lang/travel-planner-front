@@ -10,7 +10,7 @@ A aplicação permite aos usuários gerenciar o planejamento das suas viagens (d
 
 O projeto segue o **Cenário 1** das diretrizes da disciplina, no qual a Interface Front-End comunica diretamente com a API Back-End em Python (Flask) para operações de persistência de dados (CRUD) e consulta o serviço de destinos intermediado pelo Back-End.
 
-![Diagrama de Arquitetura do Sistema](./assets/arquitetura-sistema.png)
+![Diagrama de Arquitetura do Sistema](arquitetura-sistema.png)
 
 ---
 
