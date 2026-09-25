@@ -82,18 +82,27 @@
                     </div>
                 </div>
 
-                <!-- API Externa: Pesquisa de Voos / Cotação -->
-                <div class="card shadow-sm mt-3">
+                <!-- Card de Consulta à API Externa -->
+                <div class="card shadow-sm border-0 mb-4">
                     <div class="card-body">
-                        <h5 class="card-title text-primary"><i class="bi bi-search me-1"></i>Pesquisar Voos (API Externa)</h5>
-                        <div class="input-group mb-2">
-                            <input type="text" id="codigo-iata" class="form-control" placeholder="Origem/Destino (ex: MIA, CWB)">
-                            <button class="btn btn-primary" type="button" onclick="pesquisarVoosExterna()">Buscar</button>
-                        </div>
-                        <small class="text-muted d-block mb-2">Digite um código IATA para pesquisar voos.</small>
+                        <!-- Título Atualizado -->
+                        <h5 class="card-title text-primary d-flex align-items-center">
+                            <i class="bi bi-search me-2"></i> Pesquisar Destino (API Externa)
+                        </h5>
                         
-                        <!-- Área onde o resultado do voo será exibido -->
-                        <div id="resultado-voos"></div>
+                        <form onsubmit="pesquisarVoosExterna(event)" class="mt-3">
+                            <div class="input-group">
+                                <!-- Placeholder Atualizado -->
+                                <input type="text" id="codigo-iata" class="form-control" placeholder="Digite uma cidade ou país (ex: São Paulo, Paris)" required>
+                                <button type="submit" class="btn btn-primary px-4">Buscar</button>
+                            </div>
+                        </form>
+
+                        <!-- Mensagem Auxiliar Atualizada -->
+                        <p class="text-muted small mt-2 mb-0">Digite um cidade ou destino para pesquisar informações da região.</p>
+
+                        <!-- Container de Resultado -->
+                        <div id="resultado-voos" class="mt-3"></div>
                     </div>
                 </div>
 
